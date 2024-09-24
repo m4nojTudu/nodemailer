@@ -1,45 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Email Sender</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Email Sender</h1>
     <form id="emailForm">
-        <label for="to">To:</label>
-        <input type="email" id="to" name="to" placeholder="To" required>
-        <label for="subject">Subject:</label>
-        <input type="text" id="subject" name="subject" placeholder="Subject" required>
-        <label for="text">Message:</label>
-        <textarea id="text" name="text" placeholder="Message" required></textarea>
-        <button type="submit" id="submit">Send Email</button>
+      <label for="to">To:</label>
+      <input type="email" id="to" name="to" placeholder="To" required />
+      <label for="subject">Subject:</label>
+      <input
+        type="text"
+        id="subject"
+        name="subject"
+        placeholder="Subject"
+        required
+      />
+      <label for="text">Message:</label>
+      <textarea id="text" name="text" placeholder="Message" required></textarea>
+      <button type="submit" id="submit">Send Email</button>
     </form>
     <p id="responseMessage"></p>
 
     <script>
-        const form = document.getElementById('emailForm');
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            
-            const to = document.getElementById('to').value;
-            const subject = document.getElementById('subject').value;
-            const text = document.getElementById('text').value;
+      const form = document.getElementById("emailForm");
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
 
-            const response = await fetch('/send-email', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ to, subject, text }),
-            });
+        const to = document.getElementById("to").value;
+        const subject = document.getElementById("subject").value;
+        const text = document.getElementById("text").value;
 
-            const result = await response.text();
-            document.getElementById('responseMessage').innerText = result;
+        const response = await fetch("/send-email", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ to, subject, text }),
         });
 
+        const result = await response.text();
+        document.getElementById("responseMessage").innerText = result;
+      });
     </script>
-
-</body>
+  </body>
 </html>
