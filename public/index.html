@@ -38,6 +38,26 @@
             const result = await response.text();
             document.getElementById('responseMessage').innerText = result;
         });
+
+        async function loadInbox() {
+          const response = await fetch('/get-emails');
+          const emails = await response.json();
+          const inboxContainer = document.getElementById('inboxContainer');
+          inboxContainer.innerHTML = '';
+          emails.forEach(email => {
+            const emailDiv = document.createElement('div');
+            emailDiv.innerHTML = `
+              <h3>From : ${email.from}</h3>
+              <p>Subject : ${email.subject}</p>
+              <p>Date: ${email.date}</p>
+              <p>${email.body}</p>
+              <hr />
+              `;
+            inboxContainer.appendChild(emailDiv);
+          });
+        }
+
+        window.onload = loadInbox;
     </script>
 
 </body>
