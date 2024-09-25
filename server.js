@@ -42,14 +42,14 @@ app.post('/send-email', (req, res) => {
 });
 
 //IMAP to fetch received emails
-async function fetchEmails(){
+async function fetchEmails() {
     const client = new ImapFlow({
         host: process.env.IMAP_HOST,
         port: process.env.IMAP_PORT,
         secure: true,
         auth: {
-            user: process.env.IMAP_USER,
-            pass: process.env.IMAP_PASSWORD
+            user: process.env.EMAIL_USER_IMAP,
+            pass: process.env.EMAIL_PASS_IMAP
         }
     });
 
