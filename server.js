@@ -61,7 +61,7 @@ async function fetchEmails() {
             const messages = await client.search({ seen: false });
             const emailList = [];
 
-            for await (let message of client.fetch(messages, { source:true })) {
+            for await (const message of client.fetch(messages, { source:true })) {
                 const parsed = await simpleParser(message.source);
 
                 emailList.push({
