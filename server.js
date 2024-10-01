@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const { simpleParser} = require('mailparser');
 const { ImapFlow} = require("imapflow");
 const path = require('node:path');
+const fs = require('fs');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,6 +21,23 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASSWORD
     }
 });
+
+//Store emails on JSON file
+const sentEmailsFilePath = path.join(__dirname, 'sent_emails.json');
+
+// fucntion to save the email
+const saveSentEmail= (emailData) => {
+
+    // Check if the file exiists
+    if (!fs.existsSync(sentEmailsFilePath)) {
+
+        fs.writeFileSync(sentEmailsFilePath, JSON.stringify([]));
+    }
+    const existingEmails=JSON.parse(fs.readFileSync(sentEmailsFilePath));
+
+    existingEmails.push(emailData);
+    fs.writeFileSync(sentEmailsFilePath, JSON.stringify(existingEmails, null, 2));
+}
 
 //Endpoint to send email
 app.post('/send-email', (req, res) => {
@@ -37,6 +55,19 @@ app.post('/send-email', (req, res) => {
             console.log(error);
             return res.status(500).send(error.toString());
         }
+
+        // prepare to store email
+        const emailData = {
+            from: process.env.EMAIL_FROM,
+            to,
+            subject,
+            text,
+            date: new Date().toISOString(),
+            messageID: info.messageId
+        };
+
+        saveSentEmail(emailData);
+        
         res.status(200).send('Email sent successfully');
     });
 });
